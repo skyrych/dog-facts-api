@@ -23,9 +23,9 @@ func NewFactServer() *FactServer {
 	}
 }
 
-func StarServer(port string, fs *FactServer) error {
+func StartServer(port string, cert string, key string, fs *FactServer) error {
 	http.HandleFunc("/facts", fs.factsHandler)
-	return http.ListenAndServe(port, nil)
+	return http.ListenAndServeTLS(port, cert, key, nil)
 }
 
 func (fs *FactServer) factsHandler(res http.ResponseWriter, req *http.Request) {
