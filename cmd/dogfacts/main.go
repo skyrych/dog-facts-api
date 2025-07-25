@@ -1,9 +1,10 @@
+// cmd/dogfacts/main.go
 package main
 
 import (
 	"log"
 
-	app "github.com/skyrych/dog-facts-api/internal/app/dogfacts"
+	app "github.com/skyrych/dog-facts-api/internal/app/dogfacts" // <--- ENSURE THIS LINE IS CORRECT!
 )
 
 func main() {

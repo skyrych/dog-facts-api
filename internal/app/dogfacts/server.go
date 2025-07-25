@@ -14,8 +14,12 @@ type FactServer struct {
 
 func NewFactServer() *FactServer {
 	return &FactServer{
-		Facts: []string{"Needy is great", "Needy is bright", "Needy hates cats"},
-		Rand:  rand.New(rand.NewSource(time.Now().UnixNano())),
+		Facts: []string{"Needy is great", "Needy is bright", "Needy hates cats", "Needy is overprotective over his food",
+			"Needy loves his yummies", "Needy is the best hunter", "Needy loves being with his humans.",
+			"Needy has friends and enemies among the dogs.", "Needy naps throughout the day.", "Needy becomes anxious and restless when he wants to pee.",
+			"Needy loves sweets.", "Needy hunts cats, mice and frogs", "Needy loves going out with his humans.",
+			"Needy prefers local outings to coffee shops over long-distance travel."},
+		Rand: rand.New(rand.NewSource(time.Now().UnixNano())),
 	}
 }
 
