@@ -26,5 +26,5 @@ func StarServer(port string, fs *FactServer) error {
 
 func (fs *FactServer) factsHandler(res http.ResponseWriter, req *http.Request) {
 	num := fs.Rand.Intn(len(fs.Facts))
-	fmt.Fprint(res, fs.Facts[num])
+	fmt.Fprint(res, fs.Facts[num], "\n")
 }

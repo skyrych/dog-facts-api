@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	app "github.com/skyrych/dog-facts-api/internal/app/dogfacts"
 )
@@ -10,6 +10,6 @@ func main() {
 	needyRandomFact := app.NewFactServer()
 	err := app.StarServer(":8080", needyRandomFact)
 	if err != nil {
-		fmt.Println("Failed to run a server")
+		log.Fatalf("Server failed to start: %v", err)
 	}
 }
