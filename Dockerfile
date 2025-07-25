@@ -5,6 +5,9 @@ FROM golang:latest AS builder
 # Set the working directory inside the container
 WORKDIR /app
 
+
+
+
 # Copy the Go module files (go.mod and go.sum)
 # This allows Docker to cache the 'go mod download' step if your dependencies don't change
 COPY go.mod ./
@@ -38,9 +41,14 @@ WORKDIR /
 # /dog-facts-api is the path in the final image where the binary will reside.
 COPY --from=builder /app/dog-facts-api /dog-facts-api
 
+RUN mkdir /app/certs
+
+COPY cert.pem /app/certs/cert.pem
+COPY key.pem /app/certs/key.pem
+
 # Expose the port your application listens on.
 # This is metadata; you still need to map the port when running the container.
-EXPOSE 8080
+EXPOSE 443
 
 # Define the command to run when the container starts.
 # This should point to your compiled binary.
