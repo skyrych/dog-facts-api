@@ -1,0 +1,46 @@
+# .gitignore
+
+# =============================================================================
+# SSL / TLS Certificates - As requested
+# Never commit private keys or certificates to a public repository.
+# =============================================================================
+*.pem
+*.key
+*.crt
+*.csr
+certs/
+ssl/
+
+# =============================================================================
+# Go Build Artifacts & Dependencies
+# =============================================================================
+# Compiled executable binaries
+# Assuming your binary is named after the project folder
+dog-facts-api
+*.exe
+*.out
+
+# Dependency directory (if you use 'go mod vendor')
+vendor/
+
+# =============================================================================
+# Local Environment & Configuration Files
+# =============================================================================
+# Environment variables file
+.env
+.env.*
+!.env.example
+
+# =============================================================================
+# Common OS and Editor Files
+# =============================================================================
+# macOS
+.DS_Store
+
+# Visual Studio Code
+.vscode/
+
+# Temporary files
+*.tmp
+*.swp
+
