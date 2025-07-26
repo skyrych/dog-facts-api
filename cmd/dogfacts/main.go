@@ -9,7 +9,7 @@ import (
 
 func main() {
 	needyRandomFact := app.NewFactServer()
-	err := app.StartServer(":443", "/app/certs/cert.pem", "/app/certs/key.pem", needyRandomFact)
+	err := app.StartServer(":80", needyRandomFact)
 	if err != nil {
 		log.Fatalf("Server failed to start: %v", err)
 	}
