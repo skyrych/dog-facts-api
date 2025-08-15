@@ -27,10 +27,18 @@ func NewFactServer() *FactServer {
 	}
 }
 
-func StartServer(port string, fs *FactServer) error {
-	fs.Logged.Info("Starting Dog Facts API server", "port", port)
-	http.HandleFunc("/facts", fs.factsHandler)
-	return http.ListenAndServe(port, nil)
+// StartServer now returns a shutdown-aware *http.Server instance.
+func StartServer(port string, fs *FactServer) *http.Server {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/facts", fs.factsHandler)
+
+	srv := &http.Server{
+		Addr:    port,
+		Handler: mux,
+	}
+
+	fs.Logged.Info("Creating a shutdown-aware HTTP server", "port", port)
+	return srv
 }
 
 func (fs *FactServer) factsHandler(res http.ResponseWriter, req *http.Request) {
