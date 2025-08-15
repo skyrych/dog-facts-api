@@ -1,10 +1,9 @@
-// cmd/dogfacts/main.go
 package main
 
 import (
 	"context"
-	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -14,25 +13,37 @@ import (
 )
 
 func main() {
-
 	needyRandomFact := app.NewFactServer()
-	err := app.StartServer(":80", needyRandomFact)
-	if err != nil {
-		log.Fatalf("Server failed to start: %v", err)
-	}
+	server := app.StartServer(":80", needyRandomFact)
 
-	_, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	serverErrors := make(chan error, 1)
+
+	// Launch the server in a goroutine.
+	go func() {
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			serverErrors <- err
+		}
+	}()
+
+	// --- SHUTDOWN ORCHESTRATION ---
+	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer shutdownCancel()
 
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
+	log.Println("Server is running on :80. Press Ctrl+C to shut down gracefully.")
+
 	select {
-	case s := <-sigs:
-		fmt.Printf("Received the signal %s: ", s)
-		cancel()
-	case <-time.After(10 * time.Second):
-		fmt.Println("Graceful shutdown initiated due to timeout.")
-		cancel()
+	case err := <-serverErrors:
+		log.Fatalf("Fatal server error: %v", err)
+	case <-sigs:
+		log.Println("Received OS signal. Initiating graceful shutdown...")
+
+		err := server.Shutdown(shutdownCtx)
+		if err != nil {
+			log.Fatalf("Server shutdown failed: %v", err)
+		}
+		log.Println("Server shut down gracefully. Exiting.")
 	}
 }
