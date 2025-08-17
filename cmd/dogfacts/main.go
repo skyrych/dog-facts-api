@@ -13,8 +13,14 @@ import (
 )
 
 func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = ":8080"
+	} else {
+		port = ":" + port
+	}
 	needyRandomFact := app.NewFactServer()
-	server := app.StartServer(":80", needyRandomFact)
+	server := app.StartServer(port, needyRandomFact)
 
 	serverErrors := make(chan error, 1)
 
