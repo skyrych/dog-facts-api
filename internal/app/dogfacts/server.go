@@ -31,7 +31,7 @@ func NewFactServer() *FactServer {
 func StartServer(port string, fs *FactServer) *http.Server {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/facts", fs.factsHandler)
-	mux.HandleFunc("/healthz", healthzHandler)
+	mux.HandleFunc("/healthz", fs.healthzHandler)
 
 	srv := &http.Server{
 		Addr:    port,
@@ -52,7 +52,8 @@ func (fs *FactServer) factsHandler(res http.ResponseWriter, req *http.Request) {
 	fmt.Fprint(res, fs.Facts[num], "\n")
 }
 
-func healthzHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "ok")
+func (fs *FactServer) healthzHandler(res http.ResponseWriter, req *http.Request) {
+	fs.Logged.Info("Received a request:", "Method", req.Method, "Path", req.URL.Path)
+	res.WriteHeader(http.StatusOK)
+	fmt.Fprintf(res, "ok")
 }
