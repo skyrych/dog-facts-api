@@ -69,7 +69,6 @@ The API is available on `http://localhost:8080` (or your configured port) and pr
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | `GET` | `/facts` | Returns a random fact about Needy the dog. |
-| `GET` | `/healthz` | A simple health check endpoint. Returns `200 OK` if the server is running. |
 
 -----
 
